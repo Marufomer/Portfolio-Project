@@ -2,6 +2,8 @@
 
 ALX Forum is a community-driven Q&A platform for **ALX students** to ask and answer programming-related questions.
 
+- **Author**: [Maruf Omer](https://linkedin.com/in/maruf-omer-b320392b3)
+
 ## 📸 Screenshot
 ![Home Page](image/home%20page.png)
 ![Profile Page](image/profile%20page.png)
@@ -62,4 +64,5 @@ npm run dev
 This project is licensed under the **MIT License**.
 
 ---
-👨‍💻 **Happy Coding!** 🎯
+
+**Contact**: For any inquiries, please reach out to [omermaruf07@gmail.com](omermaruf07@gmail.com).
