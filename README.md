@@ -3,7 +3,7 @@
 ALX Forum is a community-driven Q&A platform for **ALX students** to ask and answer programming-related questions.
 
 ## 📸 Screenshot
-![Home Page](image/home%20page.pnghome-page.png)
+![Home Page](image/home%20page.png)
 
 ## 🚀 Features
 - 📝 **Ask Questions** – Users can post questions with tags.
