@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import multer from "multer";
 import authMiddleware from "../middleware/authMiddleware.js";
-import { checkUser, login, profileGet, profilePost, register } from "../controller/userController.js";
+import { checkUser, login, profileGet, profilePost, register, updatePassword } from "../controller/userController.js";
 
 const router = express.Router();
 
@@ -32,6 +32,9 @@ router.post("/login", login);
 // check user
 router.get('/check', authMiddleware, checkUser)
 export default router;
+
+// update password
+router.patch('/updatePassword', authMiddleware, updatePassword)
 
 // post profile
 router.post("/profile/:id", authMiddleware, upload.single('image'), profilePost)

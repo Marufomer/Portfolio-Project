@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 async function postQuestion(req, res) {
-  const { title, descrption, tags } = req.body;
+  const { user_id,title, descrption, tags } = req.body;
   const sql = `INSERT INTO questions (user_id, question_id,title, descrption,tags) VALUES (?,?,?,?,?)`;
 
   try {
@@ -24,7 +24,7 @@ async function postQuestion(req, res) {
 
     const array_tags = JSON.stringify(tag_format.split(" "));
     const uuid = uuidv4();
-    await db.query(sql, [1, uuid, title, descrption, array_tags], (err) => {
+    await db.query(sql, [user_id, uuid, title, descrption, array_tags], (err) => {
       if (err) throw err;
       console.log("question added successfully");
     });

@@ -43,23 +43,24 @@ async function register(req, res) {
 
     //   sign token
     const [new_user] = await db.query(
-      "select email, user_id, firstName from user where email = ?",
+      "select firstName,email,lastName,user_id from user where email = ?",
       [email]
     );
 
     const user_email = new_user[0].email;
     const user_id = new_user[0].user_id;
-    const first_Name = new_user[0].firstName
-    const token = jwt.sign({ user_email, user_id }, process.env.SECRET, {
+    const first_Name = new_user[0].firstName;
+    const last_Name = new_user[0].lastName;
+    const token = jwt.sign({ user_email, first_Name, last_Name, user_id }, process.env.SECRET, {
       expiresIn: "120d",
     });
 
     return res.status(StatusCodes.CREATED).json({
       message: "User registered successful",
       token,
-      user_id,
+      user_email,
       first_Name,
-      email,
+      user_id,
     });
   } catch (error) {
     console.log(error.message);
@@ -101,15 +102,17 @@ async function login(req, res) {
 
     //   sign token
     const [new_user] = await db.query(
-      "select firstName, user_id, firstName from user where email = ?",
+      "select firstName,email,lastName,user_id from user where email = ?",
       [email]
     );
 
     const user_email = new_user[0].email;
     const user_id = new_user[0].user_id;
     const first_name = new_user[0].firstName;
+    const last_Name = new_user[0].lastName;
+    console.log(user_email)
     const token = jwt.sign(
-      { user_email, first_name, user_id },
+      { user_email, first_name, last_Name, user_id },
       process.env.SECRET,
       {
         expiresIn: "120d",
@@ -132,12 +135,49 @@ async function login(req, res) {
 }
 
 async function checkUser(req, res) {
-  const { first_name, user_id } = req.user;
+  const { first_name, last_Name, user_email, user_id } = req.user;
   res
     .status(StatusCodes.OK)
-    .json({ message: "User valid", first_name, user_id });
+    .json({
+      message: "User valid",
+      first_name,
+      last_Name,
+      user_email,
+      user_id,
+    });
+};
+
+async function updatePassword(req, res) {
+  const {user_id, password} = req.body;
+  const sql = "update user set password=? where user_id=?";
+
+  try {
+    if (!user_id || !password) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Please provide all required information" });
+    }
+
+    if (password.length < 8) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Password must be at least 8 character" });
+    }
+
+    // encrypt the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    await db.query(sql, [hashedPassword, user_id]);
+    res.status(StatusCodes.OK).json({ message: "Password Updated!" });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "something went wrong, try again later!" });
+  }
 }
-;
+
 async function profilePost(req, res) {
   const image = req.file.filename;
   const user_id = req.body.user_id;
@@ -149,7 +189,7 @@ async function profilePost(req, res) {
 
     if (data[0]) {
       console.log(data);
-      await db.query("update images set image=? where userId=?", [
+      await db.query("update images set image=? where user_id=?", [
         image,
         user_id,
       ]);
@@ -167,11 +207,11 @@ async function profilePost(req, res) {
 }
 async function profileGet(req, res) {
   const sql = "select * from images where user_id=?";
-  const user_id = req.params.id;
+  const user_id = req.params.user_id;
 
   try {
     const [data] = await db.query(sql, [user_id]);
-    res.status(StatusCodes.ACCEPTED).json(data[0]);
+    res.status(StatusCodes.ACCEPTED).json(data);
   } catch (error) {
     console.log(error.message);
     return res
@@ -180,4 +220,4 @@ async function profileGet(req, res) {
   }
 }
 
-export {register, login, checkUser, profilePost, profileGet};
+export {register, login, checkUser, profilePost, profileGet, updatePassword};

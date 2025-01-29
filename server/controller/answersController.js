@@ -23,7 +23,7 @@ async function postAnswer(req, res) {
 
 async function allAnswers(req, res) {
   const question_id = req.params.question_id;
-  const sql = `select * from answers join user on answers.user_id=user.user_id join questions on answers.question_id=questions.question_id where answers.question_id=?`;
+  const sql = `select * from answers join user on answers.user_id=user.user_id where answers.question_id=?`;
 
   try {
     if (!question_id) {
