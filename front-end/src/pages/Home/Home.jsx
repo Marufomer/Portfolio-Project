@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "../../axiosConfig";
 import QuestionCard from "../../components/QuestonCard/QuestionCard";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import quuestion from "../../questions";
 import Header from "../../components/Header/Header";
 import "./home.css";
 import { Navigate, useNavigate } from "react-router-dom";
