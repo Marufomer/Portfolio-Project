@@ -4,6 +4,8 @@ ALX Forum is a community-driven Q&A platform for **ALX students** to ask and ans
 
 ## 📸 Screenshot
 ![Home Page](image/home%20page.png)
+![Profile Page](image/profile%20page.png)
+![Login Page](image/login%20page.png)
 
 ## 🚀 Features
 - 📝 **Ask Questions** – Users can post questions with tags.
@@ -42,13 +44,13 @@ npm install
 #### Start the Backend Server:
 ```sh
 cd server
-npm run server
+nodemon app.js
 ```
 
 #### Start the Frontend:
 ```sh
 cd front-end
-npm start
+npm run dev
 ```
 
 🔗 Open `http://localhost:8080` in your browser.
