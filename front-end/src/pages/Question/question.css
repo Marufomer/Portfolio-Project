@@ -87,6 +87,9 @@
     background-color: rgb(164, 41, 41);
     transition: all 0.2 ease-in-out;
 }
+.span-danger {
+    color: rgb(161, 30, 30);
+}
 
 @media (max-width: 991px) {
     .questionInput-Title-input input {

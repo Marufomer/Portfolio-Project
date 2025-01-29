@@ -1,121 +1,198 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "../../axiosConfig";
 import Header from "../../components/Header/Header";
-import { Container } from "react-bootstrap";
+import { Alert, Container } from "react-bootstrap";
 import "./answer.css";
-import profile from '../../assets/profi-img.jpg'
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import profile from "../../assets/profi-img.jpg";
+import timeAgo from "../../helper.js";
 
 function Answer() {
-
-  function handlerYourAnswer(e) {
-    e.preventDefault();
+  const token = localStorage.getItem("token");
+  const [allAnswers, setAllAnswer] = useState([]);
+  const [user, setUser] = useState({});
+  const answer = useRef(null);
+  const navigater = useNavigate();
+  const [image, setImage] = useState(undefined);
+  const [questions, setQuestion] = useState("");
+  const { question_id } = useParams();
+  const [show, setShow] = useState("");
+  const [time, setTime] = useState('')
+  const reverseArray = () => {
+    setAllAnswer((prevData) => [...prevData].reverse());
   }
+
+
+  async function getAllQuestions() {
+    try {
+      const { data } = await axios.get(`/question/single_question/${question_id}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      setQuestion(data.questions[0])
+      setTime(timeAgo(data.questions[0].created_at));
+    } catch (error) {
+      console.log(error.response);
+      navigater("/login");
+    }
+  }
+
+  async function getTotalAnswer() {
+    try {
+      const { data } = await axios.get(`/answer/all_answer/${question_id}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      setAllAnswer(data.answers);
+      reverseArray();
+      setDesc(data.answers[0].descrption);
+    } catch (error) {
+      console.log(error.response);
+    }
+  }
+
+  async function handlerYourAnswer(e) {
+    e.preventDefault();
+
+    const answerValue = answer.current.value;
+
+    try {
+      const { data } = await axios.post(
+        `/answer/post_answer`,
+        {
+          answer: answerValue,
+          user_id: user.user_id,
+          question_id: user.question_id,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      setShow("You answered successfully thank you for helping community!. Your answer will appear in 5 seconds");
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
+    } catch (error) {
+      console.log(error.response);
+    }
+  }
+
+  async function checkUser() {
+    try {
+      const { data } = await axios.get("/user/check", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+
+      const userId = data.user_id;
+      setUser({ user_id: userId, question_id: question_id });
+    } catch (error) {
+      console.log(error.response);
+      navigater("/login");
+    }
+  }
+
+  async function getImage() {
+    try {
+      const { data } = await axios.get(
+        `/user/getProfile/${questions.user_id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      setImage(data[0].image);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    checkUser();
+    getAllQuestions();
+    getTotalAnswer();
+    getImage();
+  }, [questions.user_id]);
+
   return (
     <>
       <Header />
       <Container className="mt-4 py-4">
         <div className="answer-inner-title">
-          <div className="answer-inner-question">
-            What is the best way to optimize MySQL queries?
-          </div>
+          <div className="answer-inner-question">{questions.title}</div>
           <div className="answer-inner-Ot">
             <div className="answer-inner-left">
-              <div className="answer-inner-left-text">2 min ago</div>
+              <div className="answer-inner-left-text">{time}</div>
             </div>
             <div className="answer-inner-right">
-              <img src={profile} alt="" />
-              <span className="question-inner-img-text">Maruf</span>
+              {image && (
+                <img
+                  src={`http://localhost:4000/profile/${questions.user_id}-user.png`}
+                  alt=""
+                />
+              )}
+              {!image && <AccountBoxIcon />}
+              <span className="question-inner-img-text">
+                {questions.firstName}
+              </span>
             </div>
           </div>
           <hr />
-          <div className="answer-inner-desc">
-            I'm encountering an issue in my production environment where the
-            WebSocket connection to wss://xyz.com:8080/ws fails. Interestingly,
-            this issue was also present in my local development environment, but
-            it was resolved after running npm run build and serving the build
-            output. However, the problem persists in the production environment
-            where I have hosted the application on Cloud Run. Additionally, the
-            error message specifically mentions a WebSocket connection issue,
-            but I don’t have WebSocket set up in my app, nor do I need it. Could
-            anyone provide insight into the following: Why is the WebSocket
-            connection error showing up in production? How can I remove or
-            disable the WebSocket connection attempt if it's not required in my
-            app? What could be causing this issue on Cloud Run specifically? I'd
-            appreciate any suggestions or guidance on how to resolve this issue.
-          </div>
+          <div className="answer-inner-desc">{questions.descrption}</div>
         </div>
         <div className="answer-user">
           <div className="answer-user-title">Answer</div>
           <div className="answer-user-container">
-            <div className="answer-user-inner">
-              <div className="answer-user-inner-desc">
-                What is you exact error you are seeing? Hint: in WSS this is
-                most times related to certificate configuration, you can start
-                for testing with self-signed certs, but for production you need
-                officially signed certs.
-              </div>
-              <div className="answer-user-inner-info">
-                <div className="answer-user-inner-info-left">
-                  <div>10 min ago</div>
+            {allAnswers.length === 0 && <span>No answer</span>}
+            {allAnswers?.map((el) => {
+              return (
+                <div className="answer-user-inner">
+                  <div className="answer-user-inner-desc">{el?.answer}</div>
+                  <div className="answer-user-inner-info">
+                    <div className="answer-user-inner-info-left">
+                      <div>{timeAgo(el?.created_at)}</div>
+                    </div>
+                    <div className="answer-user-inner-info-right">
+                      <span>Answered by:</span>
+                      <img
+                        src={`http://localhost:4000/profile/${el.user_id}-user.png`}
+                        alt=""
+                      />
+                      <span> {el?.firstName}</span>
+                    </div>
+                  </div>
+                  <hr className="answer-user-inner-info-Hr" />
                 </div>
-                <div className="answer-user-inner-info-right">
-                  <span>Answered by:</span>
-                  <img src={profile} alt="" />
-                  <span> Amir</span>
-                </div>
-              </div>
-              <hr className="answer-user-inner-info-Hr" />
-            </div>
-            <div className="answer-user-inner">
-              <div className="answer-user-inner-desc">
-                Although the current Python 3.13 supports Unicode 15.1.0 in its
-                unicodedata module and can identify the supported code points,
-                that won't help you with Unicode 16.0.0. If you download the
-                UnicodeData.txt files for each version (15.1.0, 16.0.0) you can
-                parse them yourself for the supported characters and write them
-                to a file; although, without a font supporting Unicode 16.0.0
-                you won't see much. UnicodeData.html describes the data format.
-              </div>
-              <div className="answer-user-inner-info">
-                <div className="answer-user-inner-info-left">
-                  <div>40 min ago</div>
-                </div>
-                <div className="answer-user-inner-info-right">
-                  <span>Answered by:</span>
-                  <img src={profile} alt="" />
-                  <span> Ferhan</span>
-                </div>
-              </div>
-              <hr className="answer-user-inner-info-Hr" />
-            </div>
-            <div className="answer-user-inner">
-              <div className="answer-user-inner-desc">
-                The set is the set of printable characters excluding blanks,
-                i.e. excluding the subset of whitespace characters that are
-                included in the definition of a printable character. Then remove
-                all characters with an age property value of less than or equal
-                to 15.1. For character details, use the latest version of
-                unicodedataplus, a drop in replacement for unicodedata that has
-                additional methods and supports Unicode 16.
-              </div>
-              <div className="answer-user-inner-info">
-                <div className="answer-user-inner-info-left">
-                  <div>3 hr ago</div>
-                </div>
-                <div className="answer-user-inner-info-right">
-                  <span>Answered by:</span>
-                  <img src={profile} alt="" />
-                  <span> Emran</span>
-                </div>
-              </div>
-              <hr className="answer-user-inner-info-Hr" />
-            </div>
+              );
+            })}
           </div>
         </div>
         <hr />
         <div className="your-answer">
           <div className="your-answer-header">Your Answer</div>
+          {show && (
+            <Alert
+              className="alert-container"
+              key={"success"}
+              variant={"success"}
+            >
+              {show}
+            </Alert>
+          )}
           <form onSubmit={handlerYourAnswer}>
-            <textarea className="your-answer-textarea" required></textarea><br/>
+            <textarea
+              className="your-answer-textarea"
+              ref={answer}
+              required
+            ></textarea>
+            <br />
             <button className="your-answer-button">Post Answer</button>
           </form>
         </div>

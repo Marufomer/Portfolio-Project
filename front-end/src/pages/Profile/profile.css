@@ -9,6 +9,11 @@
   border-radius: 5px;
   margin-bottom: 1rem;
 }
+.profile-icon {
+  height: 200px !important;
+  border: none;
+  width: 200px !important;
+}
 .profile-right-name {
   font-size: xx-large;
   font-weight: 600;
@@ -108,6 +113,16 @@
 .profile-inner-button:hover {
      background-color: rgb(164, 41, 41);
     transition: all 0.2 ease-in-out;
+}
+.profile-update{
+  display: inline-block;
+  color: green;
+  margin-top: 1rem;
+}
+.profile-alert{
+  display: inline-block;
+  color: red;
+  margin-top: 1rem;
 }
 
 @media (max-width: 991px) {

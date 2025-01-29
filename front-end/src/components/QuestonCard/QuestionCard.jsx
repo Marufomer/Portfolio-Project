@@ -1,24 +1,70 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Badge } from "react-bootstrap";
 import './Question.css'
-import profile from '../../assets/profi-img.jpg'
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "../../axiosConfig";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import timeAgofun from "../../helper.js";
 
 const QuestionCard = ({ question }) => {
   const navigater = useNavigate();
+  const [answer, setAnswer] = useState(null)
+  const timeAgo = timeAgofun(question.created_at);
+  const token = localStorage.getItem("token");
+  const question_id = question.question_id;
+ 
+  let userId = useSelector((state) => state.userInfo.user_id);
+  const [image, setImage] = useState(undefined);
+  
 
-  function handleAnswer() {
-    return navigater('/answer')
+  async function getTotalAnswer() {
+    try {
+      const { data } = await axios.get(`/answer/all_answer/${question_id}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      
+      setAnswer(data.answers.length);
+    } catch (error) {
+      console.log(error.response);
+      navigater("/login");
+    }
   }
+  function handleAnswer(question_id) {
+    return navigater(`/answer/${question_id}`);
+  }
+
+  async function getImage() {
+      try {
+        const { data } = await axios.get(
+          `/user/getProfile/${question.user_id}`,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+        setImage(data[0].image);
+        
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  
+
+  useEffect(() => {
+    getTotalAnswer();
+    getImage();
+  }, [])
+
+  
   return (
     <Card className="mb-4">
       <Card.Body>
-        <Card.Title>{question.title}</Card.Title>
-        <p>
-          I have a script which I found where it takes a image id and lets the
-          image scroll till a set limit here - (2550 px), is there any function
-          called followFrom in jQuery where is tells the...
-        </p>
+        <Card.Title>{question?.title}</Card.Title>
+        <p>{`${question?.descrption.slice(0, 300)}...`}</p>
         <div className="mb-2">
           {question.tags.map((tag, index) => (
             <Badge key={index} bg="primary" className="badge-inner me-2">
@@ -29,16 +75,26 @@ const QuestionCard = ({ question }) => {
       </Card.Body>
       <Card.Footer>
         <div className="question-inner-footer">
-          <div className="question-inner-footer-left" onClick={handleAnswer}>
-            <span className="question-inner-answer">💬answers {question.answers}</span>
+          <div
+            className="question-inner-footer-left"
+            onClick={() => handleAnswer(question.question_id)}
+          >
+            <span className="question-inner-answer">💬answers {answer}</span>
           </div>
           <div className="question-inner-footer-right">
-            <div className="question-inner-text">
-              {question.answers} min ago
-            </div>
+            <div className="question-inner-text">{timeAgo}</div>
             <div className="question-inner-img">
-              <img src={profile} alt="" />
-              <span className="question-inner-img-text">Maruf</span>
+              {image && (
+                <img
+                  src={`http://localhost:4000/profile/${image}`}
+                  alt="profile-image"
+                />
+              )}
+              {!image && <AccountBoxIcon className="que-card"/>}
+
+              <span className="question-inner-img-text">
+                {question.firstName}
+              </span>
             </div>
           </div>
         </div>

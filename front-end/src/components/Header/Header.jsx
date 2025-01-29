@@ -2,12 +2,19 @@ import React from 'react'
 import './navbar.css'
 import { Container, NavbarBrand, NavbarOffcanvas, NavbarToggle, Offcanvas, OffcanvasBody, Navbar, Nav, Button, NavLink, Col} from 'react-bootstrap'
 import HomeIcon from "@mui/icons-material/Home";
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
 import Modal_Search from '../Modal_Search/Modal_Search';
 
+
 function Header() {
+
+  
+
+  function handleLogOut() {
+    localStorage.removeItem('token');
+  }
   return (
     <Navbar
       bg="white"
@@ -44,12 +51,13 @@ function Header() {
                 <Nav.Link className="mx-3" href="/">
                   <HomeIcon className="icon-col" />
                 </Nav.Link>
-                <Nav.Link className="mx-3" href="#">
-                  <NotificationsIcon className="icon-col" />
-                </Nav.Link>
-                <NavLink className="mx-3" href='/profile'>
+
+                <NavLink className="mx-3" href="/profile">
                   <PersonIcon className="icon-col" />
                 </NavLink>
+                <Nav.Link className="mx-3" onClick={handleLogOut} href='/login'>
+                  <LogoutIcon className="icon-col" />
+                </Nav.Link>
               </Nav>
             </OffcanvasBody>
           </NavbarOffcanvas>
