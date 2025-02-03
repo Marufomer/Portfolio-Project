@@ -61,7 +61,7 @@ nodemon app.js
 
 #### Start the Frontend:
 ```sh
-cd front-end
+cd client
 cd src
 npm run dev
 ```
