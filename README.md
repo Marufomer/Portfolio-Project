@@ -43,6 +43,16 @@ npm install
 ```
 
 ### **3️⃣ Run the Application**
+**Set up your environment variables**:
+   Create a `.env` file in the backend directory with the following:
+
+    ```env
+    SECRET=your-jwt-sercert
+    USER=your-database-user
+    DATABASE=your-database-name
+    PASSWORD=your-database-password
+    ```
+
 #### Start the Backend Server:
 ```sh
 cd server
