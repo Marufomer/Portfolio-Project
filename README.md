@@ -108,9 +108,6 @@ npm run dev
 This project is licensed under the **MIT License**.
 
 ---
-
-**Contact**: For any inquiries, please reach out to [omermaruf07@gmail.com](omermaruf07@gmail.com).
-
 ## Contact
 - **Live Demo:** [Click here](https://drive.google.com/file/d/1IYJkScz1RTM3bjGhq-rygXc1koNKkwLX/view?usp=drive_link)
 - **Author:** [Maruf Omer](https://linkedin.com/in/maruf-omer-b320392b3)
