@@ -96,6 +96,11 @@ npm run dev
 
 🔗 Open `http://localhost:8080` in your browser.
 
+## Usage
+- Register as a user
+- Login and post a question
+- Answer questions from other users
+
 ## 📌 Contribution
 🚀 Contributions are welcome! Feel free to **fork** the repo, create a **feature branch**, and submit a **pull request**.
 
@@ -105,3 +110,9 @@ This project is licensed under the **MIT License**.
 ---
 
 **Contact**: For any inquiries, please reach out to [omermaruf07@gmail.com](omermaruf07@gmail.com).
+
+## Contact
+- **Live Demo:** [Click here](https://drive.google.com/file/d/1IYJkScz1RTM3bjGhq-rygXc1koNKkwLX/view?usp=drive_link)
+- **Author:** [Maruf Omer](https://linkedin.com/in/maruf-omer-b320392b3)
+- **Email:** [omermaruf07@gmail.com](omermaruf07@gmail.com)
+
