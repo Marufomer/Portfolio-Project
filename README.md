@@ -43,6 +43,34 @@ npm install
 ```
 
 ### **3️⃣ Run the Application**
+
+## Database Structure
+### Tables:
+1. **Users**
+   - `id` (Primary Key, Auto Increment)
+   - `firstName` (VARCHAR, not null)
+   - `lastName` (VARCHAR, not null)
+   - `email` (VARCHAR, Unique)
+   - `password` (VARCHAR, not null)
+
+2. **Questions**
+   - `question_id` (UUID, Primary Key)
+   - `user_id` (Foreign Key → Users.id)
+   - `title` (VARCHAR, not null)
+   - `description` (TEXT, not null)
+
+3. **Answers**
+   - `id` (Primary Key, Auto Increment)
+   - `question_id` (Foreign Key → Questions.question_id)
+   - `user_id` (Foreign Key → Users.id)
+   - `answer` (TEXT)
+
+4. **Images**
+   - `id` (Primary Key, Auto Increment)
+   - `user_id` (Foreign Key → Users.id, not null)
+   - `image` (VARCHAR, not null)
+
+
 **Set up your environment variables**:
 Create a `.env` file in the backend directory with the following:
 
