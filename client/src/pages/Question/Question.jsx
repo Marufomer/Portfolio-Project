@@ -67,7 +67,7 @@ function Question() {
   useEffect(() => {
     checkUser();
   }, []);
-
+console.log(user)
   return (
     <>
       <Header />
