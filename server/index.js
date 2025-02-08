@@ -24,6 +24,61 @@ app.use('/api/question', questionRouter)
 // answer routes
 app.use('/api/answer', answerRouter);
 
+app.get('/', async (req, res) => {
+   const sql1 = `CREATE TABLE if not exists user(
+        user_id int auto_increment,
+        firstName varchar(255) not null,
+        lastName varchar(255) not null,
+        email varchar(255) not null,
+        password varchar(255) not null,
+        
+        PRIMARY KEY (user_id)
+    )`;
+    const sql2 = `CREATE TABLE if not exists questions(
+      id int auto_increment,
+      user_id int(11) not null,
+      question_id varchar(255) not null,
+      title varchar(2000) not null,
+      descrption varchar(2000) not null,
+      tags json(1000) not null,
+
+      PRIMARY KEY (id),
+      FOREIGN KEY (user_id) REFERENCES user(user_id)
+    )`;
+    const sql3 = `CREATE TABLE if not exists answers(
+      id int auto_increment,
+      user_id int(11) not null,
+      question_id varchar(255) not null,
+      answer varchar(2000) not null,
+
+      PRIMARY KEY (id),
+      FOREIGN KEY (user_id) REFERENCES user(user_id),
+      FOREIGN KEY (question_id) REFERENCES questions(question_id)
+    )`;
+    const sql4 = `CREATE TABLE if not exists images(
+      id int auto_increment,
+      user_id int(11) not null,
+      image varchar(255) not null,
+
+      PRIMARY KEY (id),
+      FOREIGN KEY (user_id) REFERENCES user(user_id)
+    )`;
+
+    try {
+      await db.query(sql1);
+      await db.query(sql2);
+      await db.query(sql3);
+      await db.query(sql4);
+
+      res.status(StatusCodes.CREATED).json({ msg: "table created!" });
+    } catch (error) {
+      console.log(error.message);
+          return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: "something went wrong, try again later!" });
+    }
+})
+
 
 async function start() {
      try {

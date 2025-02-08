@@ -16,7 +16,7 @@ async function register(req, res) {
 
   try {
     const [user] = await db.query(
-      "select email,user_id from users where email = ?",
+      "select email,user_id from user where email = ?",
       [email]
     );
 
@@ -37,13 +37,13 @@ async function register(req, res) {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     await db.query(
-      "INSERT INTO users (firstName, lastName, email, password) VALUES (?,?,?,?)",
+      "INSERT INTO user (firstName, lastName, email, password) VALUES (?,?,?,?)",
       [firstName, lastName, email, hashedPassword]
     );
 
     //   sign token
     const [new_user] = await db.query(
-      "select firstName,email,lastName,user_id from users where email = ?",
+      "select firstName,email,lastName,user_id from user where email = ?",
       [email]
     );
 
@@ -80,7 +80,7 @@ async function login(req, res) {
 
   try {
     const [user] = await db.query(
-      "select email,password,user_id from users where email = ?",
+      "select email,password,user_id from user where email = ?",
       [email]
     );
 
@@ -102,7 +102,7 @@ async function login(req, res) {
 
     //   sign token
     const [new_user] = await db.query(
-      "select firstName,email,lastName,user_id from users where email = ?",
+      "select firstName,email,lastName,user_id from user where email = ?",
       [email]
     );
 
@@ -149,7 +149,7 @@ async function checkUser(req, res) {
 
 async function updatePassword(req, res) {
   const {user_id, password} = req.body;
-  const sql = "update users set password=? where user_id=?";
+  const sql = "update user set password=? where user_id=?";
 
   try {
     if (!user_id || !password) {
