@@ -64,9 +64,11 @@ app.get("/", async (req, res) => {
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
    )`;
+   const sqlT = `ALTER TABLE questions ADD UNIQUE (question_id);`;
 
   try {
    
+   await db.query(sqlT);
     await db.query(sql3);
     await db.query(sql4);
 
