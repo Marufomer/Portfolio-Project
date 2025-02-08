@@ -28,7 +28,7 @@ function Question() {
       const { data } = await axios.post(
         `/question/post_question`,
         {
-          user_id: 1,
+          user_id: user,
           title: tittleValue,
           description: descrptionValue,
           tags: tagsValue,
@@ -67,7 +67,7 @@ function Question() {
   useEffect(() => {
     checkUser();
   }, []);
-console.log(user)
+  
   return (
     <>
       <Header />
