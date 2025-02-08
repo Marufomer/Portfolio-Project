@@ -35,17 +35,17 @@ app.get('/', async (req, res) => {
         
         PRIMARY KEY (user_id)
     )`;
-    const sql2 = `CREATE TABLE if not exists questions(
-      id int auto_increment,
-      user_id int(11) not null,
-      question_id varchar(255) not null,
-      title varchar(2000) not null,
-      descrption varchar(2000) not null,
-      tags json(1000) not null,
+    const sql2 = `CREATE TABLE IF NOT EXISTS questions (
+    id INT AUTO_INCREMENT,
+    user_id INT(11) NOT NULL,
+    question_id VARCHAR(255) NOT NULL,
+    title VARCHAR(2000) NOT NULL,
+    description VARCHAR(2000) NOT NULL,
+    tags JSON NOT NULL,
 
-      PRIMARY KEY (id),
-      FOREIGN KEY (user_id) REFERENCES users(user_id)
-    )`;
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+   )`
     const sql3 = `CREATE TABLE if not exists answers(
       id int auto_increment,
       user_id int(11) not null,
