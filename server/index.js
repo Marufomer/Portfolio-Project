@@ -27,64 +27,66 @@ app.use("/api/answer", answerRouter);
 
 // database structure
 
-// app.get("/", async (req, res) => {
-//   const sql1 = `CREATE TABLE if not exists user(
-//         user_id int auto_increment,
-//         firstName varchar(255) not null,
-//         lastName varchar(255) not null,
-//         email varchar(255) not null,
-//         password varchar(255) not null,
+app.get("/", async (req, res) => {
+  const sql1 = `CREATE TABLE if not exists user(
+        user_id int auto_increment,
+        firstName varchar(255) not null,
+        lastName varchar(255) not null,
+        email varchar(255) not null,
+        password varchar(255) not null,
         
-//         PRIMARY KEY (user_id)
-//     )`;
-//   const sql2 = `CREATE TABLE IF NOT EXISTS questions (
-//     id INT AUTO_INCREMENT,
-//     user_id INT(11) NOT NULL,
-//     question_id VARCHAR(255) NOT NULL,
-//     title VARCHAR(2000) NOT NULL,
-//     description VARCHAR(2000) NOT NULL,
-//     tags JSON NOT NULL,
+        PRIMARY KEY (user_id)
+    )`;
+  const sql2 = `CREATE TABLE IF NOT EXISTS questions (
+    id INT AUTO_INCREMENT,
+    user_id INT(11) NOT NULL,
+    question_id VARCHAR(255) NOT NULL,
+    title VARCHAR(2000) NOT NULL,
+    description VARCHAR(2000) NOT NULL,
+    tags JSON NOT NULL,
 
-//     PRIMARY KEY (id),
-//     FOREIGN KEY (user_id) REFERENCES user(user_id)
-//    )`;
-//   const sql3 = `CREATE TABLE IF NOT EXISTS answers (
-//     id INT AUTO_INCREMENT,
-//     user_id INT(11) NOT NULL,
-//     question_id VARCHAR(255) NOT NULL,
-//     answer VARCHAR(2000) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES user(user_id)
+   )`;
+  const sql3 = `CREATE TABLE IF NOT EXISTS answers (
+    id INT AUTO_INCREMENT,
+    user_id INT(11) NOT NULL,
+    question_id VARCHAR(255) NOT NULL,
+    answer VARCHAR(2000) NOT NULL,
 
-//     PRIMARY KEY (id),
-//     FOREIGN KEY (user_id) REFERENCES user(user_id),
-//     FOREIGN KEY (question_id) REFERENCES questions(question_id)
-//    )`;
-//   const sql4 = `CREATE TABLE IF NOT EXISTS images (
-//     id INT AUTO_INCREMENT,
-//     user_id INT(11) NOT NULL,
-//     image VARCHAR(255) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES user(user_id),
+    FOREIGN KEY (question_id) REFERENCES questions(question_id)
+   )`;
+  const sql4 = `CREATE TABLE IF NOT EXISTS images (
+    id INT AUTO_INCREMENT,
+    user_id INT(11) NOT NULL,
+    image VARCHAR(255) NOT NULL,
 
-//     PRIMARY KEY (id),
-//     FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
-//    )`;
-//    const sqlT = `ALTER TABLE questions ADD UNIQUE (question_id)`;
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
+   )`;
+  const sqlT = `ALTER TABLE questions
+ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;`;
+  const sqlA = `ALTER TABLE answers
+ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;`;
 
-//   try {
-   
-//    await db.query(sql1)
-//    await db.query(sql2)
-//    await db.query(sqlT);
-//    await db.query(sql3)
-//    await db.query(sql4);
-   
+  try {
+    // await db.query(sql1);
+    // await db.query(sql2);
+    await db.query(sqlT);
+    await db.query(sqlA);
+    // await db.query(sql3);
+    // await db.query(sql4);
 
-//     res.status(StatusCodes.CREATED).json({ msg: "table created!" });
-//   } catch (error) {
-//     console.log(error.message);
-//     return res
-//       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-//       .json({ message: "something went wrong, try again later!" });
-//   }
-// });
+    res.status(StatusCodes.CREATED).json({ msg: "table created!" });
+  } catch (error) {
+    console.log(error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "something went wrong, try again later!" });
+  }
+});
 
 async function start() {
   try {
