@@ -1,15 +1,10 @@
 import mysql from 'mysql2';
 import dotenv from 'dotenv';
 dotenv.config();
-console.log(process.env.USER);
 
-const db = mysql.createPool({
-  user: process.env.USER,
-  database: process.env.DATABASE,
-  host: "localhost",
-  password: process.env.PASSWORD,
-  connectionLimit: 10,
-});
+const urlDb = `msql://${process.env.MYSQLUSER}:${process.env.MYSQLPASSWORD}@${process.env.MYSQLHOST}:${process.env.MYSQLPORT}/${process.env.MYSQLDATABASE}`;
+
+const db = mysql.createPool(urlDb);
 
 export default db.promise();
 
