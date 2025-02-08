@@ -39,7 +39,7 @@ const Home = () => {
       reverseArray();
     } catch (error) {
       console.log(error.response);
-      navigate("/login");
+      // navigate("/login");
     }
   }
   async function checkUser() {

@@ -134,7 +134,7 @@ function Answer() {
             <div className="answer-inner-right">
               {image && (
                 <img
-                  src={`http://localhost:4000/profile/${questions.user_id}-user.png`}
+                  src={`https://portfolio-project-production-fbf9.up.railway.app/profile/${questions.user_id}-user.png`}
                   alt=""
                 />
               )}
@@ -162,7 +162,7 @@ function Answer() {
                     <div className="answer-user-inner-info-right">
                       <span>Answered by:</span>
                       <img
-                        src={`http://localhost:4000/profile/${el.user_id}-user.png`}
+                        src={`https://portfolio-project-production-fbf9.up.railway.app/profile/${el.user_id}-user.png`}
                         alt=""
                       />
                       <span> {el?.firstName}</span>

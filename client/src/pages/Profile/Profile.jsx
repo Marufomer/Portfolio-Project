@@ -157,7 +157,7 @@ function Profile() {
             {image && (
               <img
                 className="profile-left-img"
-                src={`http://localhost:4000/profile/${image}`}
+                src={`https://portfolio-project-production-fbf9.up.railway.app/profile/${image}`}
                 alt="Profile image"
               />
             )}

@@ -86,11 +86,11 @@ const QuestionCard = ({ question }) => {
             <div className="question-inner-img">
               {image && (
                 <img
-                  src={`http://localhost:4000/profile/${image}`}
+                  src={`https://portfolio-project-production-fbf9.up.railway.app/profile/${image}`}
                   alt="profile-image"
                 />
               )}
-              {!image && <AccountBoxIcon className="que-card"/>}
+              {!image && <AccountBoxIcon className="que-card" />}
 
               <span className="question-inner-img-text">
                 {question.firstName}
