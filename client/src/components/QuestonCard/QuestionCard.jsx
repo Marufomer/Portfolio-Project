@@ -64,7 +64,7 @@ const QuestionCard = ({ question }) => {
     <Card className="mb-4">
       <Card.Body>
         <Card.Title>{question?.title}</Card.Title>
-        <p>{question?.descrption}</p>
+        <p>{question?.description}</p>
         <div className="mb-2">
           {question.tags.map((tag, index) => (
             <Badge key={index} bg="primary" className="badge-inner me-2">
