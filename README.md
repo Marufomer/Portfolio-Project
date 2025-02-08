@@ -85,7 +85,7 @@ PASSWORD=your-database-password
 #### Start the Backend Server:
 ```sh
 cd server
-nodemon app.js
+nodemon index.js
 ```
 
 #### Start the Frontend:
