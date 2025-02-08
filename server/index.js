@@ -26,7 +26,7 @@ app.use("/api/question", questionRouter);
 app.use("/api/answer", answerRouter);
 
 app.get("/", async (req, res) => {
-  const sql1 = `CREATE TABLE if not exists users(
+  const sql1 = `CREATE TABLE if not exists user(
         user_id int auto_increment,
         firstName varchar(255) not null,
         lastName varchar(255) not null,
@@ -44,7 +44,7 @@ app.get("/", async (req, res) => {
     tags JSON NOT NULL,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    FOREIGN KEY (user_id) REFERENCES user(user_id)
    )`;
   const sql3 = `CREATE TABLE IF NOT EXISTS answers (
     id INT AUTO_INCREMENT,
@@ -53,7 +53,7 @@ app.get("/", async (req, res) => {
     answer VARCHAR(2000) NOT NULL,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (user_id) REFERENCES user(user_id),
     FOREIGN KEY (question_id) REFERENCES questions(question_id)
    )`;
   const sql4 = `CREATE TABLE IF NOT EXISTS images (
@@ -62,13 +62,18 @@ app.get("/", async (req, res) => {
     image VARCHAR(255) NOT NULL,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
    )`;
-   const sqlT = `ALTER TABLE user ADD UNIQUE (email);`;
+   const sqlT = `ALTER TABLE questions ADD UNIQUE (question_id)`;
 
   try {
    
+   await db.query(sql1)
+   await db.query(sql2)
    await db.query(sqlT);
+   await db.query(sql3)
+   await db.query(sql4);
+   
 
     res.status(StatusCodes.CREATED).json({ msg: "table created!" });
   } catch (error) {
