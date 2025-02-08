@@ -66,10 +66,10 @@ app.get('/', async (req, res) => {
     )`;
 
     try {
-      await db.query(sql1);
-      // await db.query(sql2);
-      // await db.query(sql3);
-      // await db.query(sql4);
+      // await db.query(sql1);
+      await db.query(sql2);
+      await db.query(sql3);
+      await db.query(sql4);
 
       res.status(StatusCodes.CREATED).json({ msg: "table created!" });
     } catch (error) {
