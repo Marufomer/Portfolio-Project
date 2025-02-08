@@ -28,7 +28,7 @@ function Question() {
       const { data } = await axios.post(
         `/question/post_question`,
         {
-          user_id: user,
+          user_id: 1,
           title: tittleValue,
           description: descrptionValue,
           tags: tagsValue,
