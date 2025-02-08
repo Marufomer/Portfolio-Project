@@ -4,11 +4,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 async function postQuestion(req, res) {
-  const { user_id,title, descrption, tags } = req.body;
-  const sql = `INSERT INTO questions (user_id, question_id,title, descrption,tags) VALUES (?,?,?,?,?)`;
+  const { user_id,title, description, tags } = req.body;
+  const sql = `INSERT INTO questions (user_id, question_id,title, description,tags) VALUES (?,?,?,?,?)`;
 
   try {
-    if (!title || !descrption || !tags) {
+    if (!title || !description || !tags) {
       return res.status(401).json({ msg: "Please provide all data" });
     }
 
@@ -24,7 +24,7 @@ async function postQuestion(req, res) {
 
     const array_tags = JSON.stringify(tag_format.split(" "));
     const uuid = uuidv4();
-    await db.query(sql, [user_id, uuid, title, descrption, array_tags], (err) => {
+    await db.query(sql, [user_id, uuid, title, description, array_tags], (err) => {
       if (err) throw err;
       console.log("question added successfully");
     });
