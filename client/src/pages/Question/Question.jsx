@@ -30,7 +30,7 @@ function Question() {
         {
           user_id: user,
           title: tittleValue,
-          descrption: descrptionValue,
+          description: descrptionValue,
           tags: tagsValue,
         },
         {
